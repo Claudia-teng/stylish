@@ -6,9 +6,9 @@ import member from "./assets/member.png";
 function Navbar() {
   return (
     <>
-      <nav className={styles.navbar}>
+      <nav className={styles.nav}>
         <img alt="logo" className={styles.logo} src={logo} />
-        <ul>
+        <ul className={styles.ul}>
           <li>
             <p>女</p>
             <p>裝</p>
@@ -24,7 +24,10 @@ function Navbar() {
         </ul>
         <div className={styles.buttons}>
           <input></input>
-          <img alt="cart" src={cart} />
+          <div className={styles.cart}>
+            <img alt="cart" src={cart} />
+            <div>1</div>
+          </div>
           <img alt="profile" src={member} />
         </div>
       </nav>

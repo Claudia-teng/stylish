@@ -1,12 +1,17 @@
-.navbar 
+.nav 
   display: flex
   align-items: center
-  padding: 1rem 0rem
+  padding: 1.3rem 0rem
   border-bottom: 2rem solid #313538
+  .logo
+    width: 15%
+    margin: 0rem 2rem
+    cursor: pointer
 
-ul
+.ul
   display: flex
   li
+    font-size: 1.1rem
     list-style-type: none
     height: 1.5rem
     flex: 1
@@ -18,23 +23,41 @@ ul
     padding-right: 1.5rem
     &:not(:last-child)
       border-right: 1px solid #3F3A3A
-img
-  width: 2rem
-.logo
-  width: 15%
-  margin: 0rem 2rem
-  cursor: pointer
+
 .buttons
   margin-left: auto
   display: flex
   padding-right: 2rem
+  align-items: center
+  img
+    width: 2.5rem
   input, img
-    margin-right: 1rem
+    margin-right: 1.5rem
   input
+    width: 10rem
+    height: 35px
     border-radius: 20px
     border: solid 1px #979797
-
-
+    background-image: url("assets/search.png") 
+    background-repeat: no-repeat
+    background-position: 95%
+    background-size: 2rem
+    padding-left: 1rem
+  .cart
+    position: relative
+    > div
+      position: absolute
+      width: 1.1rem
+      height: 1.1rem
+      border-radius: 50%
+      background-color: #8B572A
+      color: #ffffff
+      display: flex
+      justify-content: center
+      align-items: center
+      padding: 0.2rem
+      right: 20px
+      bottom: 0px
 
 
 
