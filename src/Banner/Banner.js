@@ -1,12 +1,30 @@
+import { useEffect, useState } from "react";
 import styles from "./Banner.module.sass";
+import axios from "axios";
 
 function Banner() {
-  let slogan = "<h1>於是</h1><h1>我也想要給你</h1><h1>一個那麼美好的自己。</h1><h2>不朽《與自己和好如初》</h2>";
+  let [campaigns, setCampaigns] = useState([]);
+
+  async function getCampaigns() {
+    const result = await axios.get(`http://3.212.173.194/api/1.0/marketing/campaigns`);
+    setCampaigns(result.data.data);
+  }
+
+  useEffect(() => {
+    getCampaigns();
+  }, []);
+
   return (
     <>
       <div className={styles.banner}>
-        <img alt="banner" src="http://3.212.173.194/uploads/1658370308488.png"></img>
-        <div dangerouslySetInnerHTML={{ __html: slogan }}></div>
+        {campaigns.map((campaign) => {
+          return (
+            <>
+              <img alt="banner" src={campaign.picture}></img>
+              <div dangerouslySetInnerHTML={{ __html: campaign.story }}></div>
+            </>
+          );
+        })}
       </div>
     </>
   );

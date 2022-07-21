@@ -5,8 +5,10 @@ import member from "../assets/member.png";
 import { Link, NavLink } from "react-router-dom";
 
 function Navbar({ setKeyword }) {
-  function onInputChange(e) {
-    setKeyword(e.target.value);
+  function handleKeyPress(e) {
+    if (e.key === "Enter") {
+      setKeyword(e.target.value);
+    }
   }
 
   let activeStyle = {
@@ -36,7 +38,7 @@ function Navbar({ setKeyword }) {
           </li>
         </ul>
         <div className={styles.buttons}>
-          <input onChange={onInputChange}></input>
+          <input onKeyUp={handleKeyPress}></input>
           <div className={styles.cart}>
             <img alt="cart" src={cart} />
             <div>1</div>
