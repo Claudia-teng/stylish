@@ -1,16 +1,17 @@
 import styles from "./Product.module.sass";
 
-function Product() {
+function Product({ product }) {
   return (
     <>
       <div className={styles.card}>
-        <img alt="product" src="http://3.212.173.194/uploads/1658370326714.png" />
+        <img alt="product" src={product.main_image} />
         <div className={styles.colorBoxes}>
-          <div></div>
-          <div></div>
+          {product.colors.map((color, i) => {
+            return <div key={i} style={{ backgroundColor: color.code }}></div>;
+          })}
         </div>
-        <p>前開衩扭結洋裝</p>
-        <p>TWD.799</p>
+        <p>{product.title}</p>
+        <p>TWD.{product.price}</p>
       </div>
     </>
   );
