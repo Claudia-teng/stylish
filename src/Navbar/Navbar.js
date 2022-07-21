@@ -1,7 +1,7 @@
 import styles from "./Navbar.module.sass";
-import logo from "./assets/logo.png";
-import cart from "./assets/cart.png";
-import member from "./assets/member.png";
+import logo from "../assets/logo.png";
+import cart from "../assets/cart.png";
+import member from "../assets/member.png";
 
 function Navbar() {
   return (
