@@ -7,7 +7,8 @@ function Product({ product }) {
         <img alt="product" src={product.main_image} />
         <div className={styles.colorBoxes}>
           {product.colors.map((color, i) => {
-            return <div key={i} style={{ backgroundColor: color.code }}></div>;
+            console.log(color);
+            return <div key={i} style={{ backgroundColor: `#${color.code}` }}></div>;
           })}
         </div>
         <p>{product.title}</p>
