@@ -2,24 +2,33 @@ import styles from "./Navbar.module.sass";
 import logo from "../assets/logo.png";
 import cart from "../assets/cart.png";
 import member from "../assets/member.png";
+import { Link, NavLink } from "react-router-dom";
 
 function Navbar() {
+  let activeStyle = {
+    color: "#8B572A",
+  };
   return (
     <>
       <nav className={styles.nav}>
-        <img alt="logo" className={styles.logo} src={logo} />
+        <Link to="/">
+          <img alt="logo" className={styles.logo} src={logo} />
+        </Link>
         <ul className={styles.ul}>
           <li>
-            <p>女</p>
-            <p>裝</p>
+            <NavLink to="/women" style={({ isActive }) => (isActive ? activeStyle : undefined)}>
+              <p>女裝</p>
+            </NavLink>
           </li>
           <li>
-            <p>男</p>
-            <p>裝</p>
+            <NavLink to="/men" style={({ isActive }) => (isActive ? activeStyle : undefined)}>
+              <p>男裝</p>
+            </NavLink>
           </li>
           <li>
-            <p>配</p>
-            <p>件</p>
+            <NavLink to="/accessories" style={({ isActive }) => (isActive ? activeStyle : undefined)}>
+              <p>配件</p>
+            </NavLink>
           </li>
         </ul>
         <div className={styles.buttons}>

@@ -8,14 +8,22 @@
   top: 0
   z-index: 100
   background-color: #ffffff
+  a
+    display: contents
   .logo
     width: 15%
     margin: 0rem 2rem
     cursor: pointer
 .ul
   display: flex
+  a
+    text-decoration: none
+    color:#3F3A3A
+    display: contents
+    &:hover
+      color: #8B572A
   li
-    color: #3F3A3A
+    cursor: pointer
     font-size: 1.1rem
     list-style-type: none
     height: 1.5rem
@@ -23,11 +31,11 @@
     display: flex
     justify-content: space-between
     align-items: center
-    width: 3.5rem
     margin-right: 1.5rem
-    padding-right: 1.5rem
     &:not(:last-child)
       border-right: 1px solid #3F3A3A
+  p
+    letter-spacing: 30px
 
 .buttons
   margin-left: auto

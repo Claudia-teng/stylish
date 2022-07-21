@@ -1,15 +1,15 @@
-import Navbar from "./Navbar/Navbar";
-import Banner from "./Banner/Banner";
-import ProductList from "./ProductList/ProductList";
-import Footer from "./Footer/Footer";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Index from "./Pages/Index.js";
 
 function App() {
   return (
     <>
-      <Navbar />
-      <Banner />
-      <ProductList />
-      <Footer />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Index />}></Route>
+          <Route path="/:category" element={<Index />}></Route>
+        </Routes>
+      </BrowserRouter>
     </>
   );
 }
