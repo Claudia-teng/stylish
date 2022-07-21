@@ -17,12 +17,12 @@ function Banner() {
   return (
     <>
       <div className={styles.banner}>
-        {campaigns.map((campaign) => {
+        {campaigns.map((campaign, i) => {
           return (
-            <>
+            <div key={i}>
               <img alt="banner" src={campaign.picture}></img>
               <div dangerouslySetInnerHTML={{ __html: campaign.story }}></div>
-            </>
+            </div>
           );
         })}
       </div>
