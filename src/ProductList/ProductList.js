@@ -4,23 +4,29 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-function ProductList() {
+function ProductList({ keyword }) {
   let params = useParams();
   let category = params.category || "all";
 
   const [products, setProducts] = useState([]);
   async function getProduct(category) {
-    const result = await axios.get(`http://3.212.173.194/api/1.0/products/${category}`);
+    let result;
+    if (keyword) {
+      result = await axios.get(`http://3.212.173.194/api/1.0/products/search?keyword=${keyword}`);
+    } else {
+      result = await axios.get(`http://3.212.173.194/api/1.0/products/${category}`);
+    }
     setProducts(result.data.data);
   }
 
   useEffect(() => {
     getProduct(category);
-  }, [category]);
+  }, [category, keyword]);
 
   return (
     <>
       <div className={styles.list}>
+        {!products.length && <p>查無商品</p>}
         {products.map((product, i) => {
           return <Product key={i} product={product} />;
         })}

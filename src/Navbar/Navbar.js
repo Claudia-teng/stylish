@@ -4,7 +4,11 @@ import cart from "../assets/cart.png";
 import member from "../assets/member.png";
 import { Link, NavLink } from "react-router-dom";
 
-function Navbar() {
+function Navbar({ setKeyword }) {
+  function onInputChange(e) {
+    setKeyword(e.target.value);
+  }
+
   let activeStyle = {
     color: "#8B572A",
   };
@@ -32,7 +36,7 @@ function Navbar() {
           </li>
         </ul>
         <div className={styles.buttons}>
-          <input></input>
+          <input onChange={onInputChange}></input>
           <div className={styles.cart}>
             <img alt="cart" src={cart} />
             <div>1</div>
