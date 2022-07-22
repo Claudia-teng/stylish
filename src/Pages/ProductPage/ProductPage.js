@@ -5,9 +5,10 @@ import { useEffect, useState } from "react";
 
 function ProductPage() {
   const [product, setProduct] = useState({});
-  const [counter, setCounter] = useState(1);
+  const [counter, setCounter] = useState(0);
   const [selectedColor, setColor] = useState("");
   const [selectedSize, setSize] = useState("S");
+  const [stock, setStock] = useState("S");
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
 
@@ -17,21 +18,31 @@ function ProductPage() {
     setColor(result.data.data.colors[0].code);
   }
 
+  function checkStock(color, size) {
+    let index = product.variants?.findIndex((variant) => {
+      return variant.color_code === color && variant.size === size;
+    });
+    setStock(product.variants[index].stock);
+  }
+
   function handleCounter(event, type) {
     if (type === "plus") {
       setCounter((counter) => counter + 1);
     } else {
-      if (counter === 0) return;
       setCounter((counter) => counter - 1);
     }
   }
 
   function onSelectSize(event, size) {
     setSize(size);
+    setCounter(0);
+    checkStock(selectedColor, size);
   }
 
   function onSelectColor(event, color) {
     setColor(color.code);
+    setCounter(0);
+    checkStock(color.code, selectedSize);
   }
 
   useEffect(() => {
@@ -80,13 +91,19 @@ function ProductPage() {
             </div>
             <div className={styles.count}>
               <span>數量</span>
-              <div className={styles.counter}>
-                <button onClick={(event) => handleCounter(event, "minus")}>-</button>
+              <div className={`${styles.counter}`}>
+                <button onClick={(event) => handleCounter(event, "minus")} disabled={counter === 0}>
+                  -
+                </button>
                 <p>{counter}</p>
-                <button onClick={(event) => handleCounter(event, "plus")}>+</button>
+                <button onClick={(event) => handleCounter(event, "plus")} disabled={counter === stock}>
+                  +
+                </button>
               </div>
             </div>
-            <button className={styles.cartBtn}>加入購物車</button>
+            <button className={styles.cartBtn} disabled={counter === 0}>
+              加入購物車
+            </button>
             <h3>{product.note}</h3>
             <h3 className={styles.texture}>{product.texture}</h3>
             <h3 className={styles.description} dangerouslySetInnerHTML={{ __html: product.description }}></h3>
