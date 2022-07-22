@@ -1,7 +1,6 @@
 import Navbar from "../Navbar/Navbar";
 import Banner from "../Banner/Banner";
 import ProductList from "../ProductList/ProductList";
-import Footer from "../Footer/Footer";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
@@ -45,7 +44,6 @@ function Index() {
       />
       <Banner />
       <ProductList keyword={keyword} products={products} />
-      <Footer />
     </>
   );
 }
