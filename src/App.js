@@ -7,15 +7,11 @@ import ProductPage from "./Pages/ProductPage/ProductPage.js";
 import Navbar from "./Navbar/Navbar";
 import Footer from "./Footer/Footer";
 import axios from "axios";
-import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useState } from "react";
 
 function App() {
   const [keyword, setKeyword] = useState("");
   const [products, setProducts] = useState([]);
-
-  let params = useParams();
-  let category = params.category || "all";
 
   async function handleKeyPress(e) {
     if (e.key === "Enter") onSearchProduct();
@@ -30,16 +26,6 @@ function App() {
     }
   }
 
-  async function getProduct(category) {
-    const result = await axios.get(`http://3.212.173.194/api/1.0/products/${category}`);
-    setProducts(result.data.data);
-  }
-
-  useEffect(() => {
-    console.log("aaa");
-    getProduct(category);
-  }, [category]);
-
   return (
     <>
       <BrowserRouter>
@@ -50,12 +36,15 @@ function App() {
           onSearchProduct={onSearchProduct}
         />
         <Routes>
-          <Route path="/" element={<Index keyword={keyword} products={products} />}></Route>
+          <Route path="/" element={<Index keyword={keyword} products={products} setProducts={setProducts} />}></Route>
           <Route path="/product" element={<ProductPage />}></Route>
           <Route path="/cart" element={<Cart />}></Route>
           <Route path="/login" element={<LoginPage />}></Route>
           <Route path="/profile" element={<Profile />}></Route>
-          <Route path="/:category" element={<Index keyword={keyword} products={products} />}></Route>
+          <Route
+            path="/:category"
+            element={<Index keyword={keyword} products={products} setProducts={setProducts} />}
+          ></Route>
         </Routes>
         <Footer />
       </BrowserRouter>
