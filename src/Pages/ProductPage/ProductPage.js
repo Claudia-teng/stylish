@@ -30,6 +30,10 @@ function ProductPage() {
     setSize(size);
   }
 
+  function onSelectColor(event, color) {
+    setColor(color.code);
+  }
+
   useEffect(() => {
     getProductDetail();
   }, []);
@@ -50,6 +54,7 @@ function ProductPage() {
                   return (
                     <div
                       key={i}
+                      onClick={(event) => onSelectColor(event, color)}
                       className={color.code === selectedColor ? styles.colorActive : ""}
                       style={{ backgroundColor: `#${color.code}` }}
                     ></div>
