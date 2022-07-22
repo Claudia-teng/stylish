@@ -1,7 +1,8 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./Pages/Index.js";
 import Cart from "./Pages/Cart.js";
-import Profile from "./Pages/Profile.js";
+import Profile from "./Pages/ProfilePage/ProfilePage.js";
+import LoginPage from "./Pages/LoginPage/LoginPage.js";
 import ProductPage from "./Pages/ProductPage/ProductPage.js";
 import Navbar from "./Navbar/Navbar";
 import Footer from "./Footer/Footer";
@@ -52,6 +53,7 @@ function App() {
           <Route path="/" element={<Index keyword={keyword} products={products} />}></Route>
           <Route path="/product" element={<ProductPage />}></Route>
           <Route path="/cart" element={<Cart />}></Route>
+          <Route path="/login" element={<LoginPage />}></Route>
           <Route path="/profile" element={<Profile />}></Route>
           <Route path="/:category" element={<Index keyword={keyword} products={products} />}></Route>
         </Routes>

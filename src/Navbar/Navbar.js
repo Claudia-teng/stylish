@@ -77,7 +77,7 @@ function Navbar({ onSearchProduct, handleKeyPress, keyword, setKeyword }) {
               <div>1</div>
             </div>
           </NavLink>
-          <NavLink to="/profile" style={({ isActive }) => (isActive ? activeStyle : undefined)}>
+          <NavLink to="/login" style={({ isActive }) => (isActive ? activeStyle : undefined)}>
             <img alt="profile" src={memberIcon} onMouseOver={onMemberHover} onMouseOut={onMemberHover} />
           </NavLink>
         </div>
