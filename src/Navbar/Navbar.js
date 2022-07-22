@@ -1,16 +1,30 @@
 import styles from "./Navbar.module.sass";
 import logo from "../assets/logo.png";
 import cart from "../assets/cart.png";
+import cartHover from "../assets/cart-hover.png";
 import member from "../assets/member.png";
+import memberHover from "../assets/member-hover.png";
 import { Link, NavLink } from "react-router-dom";
+import { useState } from "react";
 
 function Navbar({ handleKeyPress, keyword, setKeyword }) {
+  const [cartIcon, setCartIcon] = useState(cart);
+  const [memberIcon, setMemberIcon] = useState(member);
+
   function onInputChange(e) {
     setKeyword(e.target.value);
   }
 
   function onCategoryChange() {
     setKeyword("");
+  }
+
+  function onCartHover() {
+    setCartIcon(cartIcon === cart ? cartHover : cart);
+  }
+
+  function onMemberHover() {
+    setMemberIcon(memberIcon === member ? memberHover : member);
   }
 
   let activeStyle = {
@@ -41,11 +55,15 @@ function Navbar({ handleKeyPress, keyword, setKeyword }) {
         </ul>
         <div className={styles.buttons}>
           <input value={keyword} onChange={onInputChange} onKeyUp={handleKeyPress}></input>
-          <div className={styles.cart}>
-            <img alt="cart" src={cart} />
-            <div>1</div>
-          </div>
-          <img alt="profile" src={member} />
+          <NavLink to="/cart" style={({ isActive }) => (isActive ? activeStyle : undefined)}>
+            <div className={styles.cart}>
+              <img alt="cart" src={cartIcon} onMouseOver={onCartHover} onMouseOut={onCartHover} />
+              <div>1</div>
+            </div>
+          </NavLink>
+          <NavLink to="/profile" style={({ isActive }) => (isActive ? activeStyle : undefined)}>
+            <img alt="profile" src={memberIcon} onMouseOver={onMemberHover} onMouseOut={onMemberHover} />
+          </NavLink>
         </div>
       </nav>
     </>
