@@ -14,13 +14,15 @@ function Index() {
   let category = params.category || "all";
 
   async function handleKeyPress(e) {
-    if (e.key === "Enter") {
-      try {
-        const result = await axios.get(`http://3.212.173.194/api/1.0/products/search?keyword=${keyword}`);
-        setProducts(result.data.data);
-      } catch (err) {
-        setProducts([]);
-      }
+    if (e.key === "Enter") onSearchProduct();
+  }
+
+  async function onSearchProduct() {
+    try {
+      const result = await axios.get(`http://3.212.173.194/api/1.0/products/search?keyword=${keyword}`);
+      setProducts(result.data.data);
+    } catch (err) {
+      setProducts([]);
     }
   }
 
@@ -35,7 +37,12 @@ function Index() {
 
   return (
     <>
-      <Navbar keyword={keyword} setKeyword={setKeyword} handleKeyPress={handleKeyPress} />
+      <Navbar
+        keyword={keyword}
+        setKeyword={setKeyword}
+        handleKeyPress={handleKeyPress}
+        onSearchProduct={onSearchProduct}
+      />
       <Banner />
       <ProductList keyword={keyword} products={products} />
       <Footer />
