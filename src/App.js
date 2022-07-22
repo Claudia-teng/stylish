@@ -6,6 +6,7 @@ import LoginPage from "./Pages/LoginPage/LoginPage.js";
 import ProductPage from "./Pages/ProductPage/ProductPage.js";
 import Navbar from "./Navbar/Navbar";
 import Footer from "./Footer/Footer";
+import ScrollToTop from "./ScrollToTop";
 import axios from "axios";
 import { useState } from "react";
 
@@ -35,6 +36,7 @@ function App() {
           handleKeyPress={handleKeyPress}
           onSearchProduct={onSearchProduct}
         />
+        <ScrollToTop />
         <Routes>
           <Route path="/" element={<Index keyword={keyword} products={products} setProducts={setProducts} />}></Route>
           <Route path="/product" element={<ProductPage />}></Route>
