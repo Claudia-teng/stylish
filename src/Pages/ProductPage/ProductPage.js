@@ -5,12 +5,22 @@ import { useEffect, useState } from "react";
 
 function ProductPage() {
   const [product, setProduct] = useState({});
+  const [counter, setCounter] = useState(1);
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
 
   async function getProductDetail() {
     const result = await axios.get(`http://3.212.173.194/api/1.0/products/details?id=${id}`);
     setProduct(result.data.data ? result.data.data : null);
+  }
+
+  function handleCounter(event, type) {
+    if (type === "plus") {
+      setCounter((counter) => counter + 1);
+    } else {
+      if (counter === 0) return;
+      setCounter((counter) => counter - 1);
+    }
   }
 
   useEffect(() => {
@@ -44,8 +54,13 @@ function ProductPage() {
             </div>
             <div className={styles.count}>
               <span>數量</span>
+              <div className={styles.counter}>
+                <button onClick={(event) => handleCounter(event, "minus")}>-</button>
+                <p>{counter}</p>
+                <button onClick={(event) => handleCounter(event, "plus")}>+</button>
+              </div>
             </div>
-            <button>加入購物車</button>
+            <button className={styles.cartBtn}>加入購物車</button>
             <h3>{product.note}</h3>
             <h3 className={styles.texture}>{product.texture}</h3>
             <h3 className={styles.description} dangerouslySetInnerHTML={{ __html: product.description }}></h3>
