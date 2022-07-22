@@ -6,12 +6,15 @@ import { useEffect, useState } from "react";
 function ProductPage() {
   const [product, setProduct] = useState({});
   const [counter, setCounter] = useState(1);
+  const [selectedColor, setColor] = useState("");
+  const [selectedSize, setSize] = useState("S");
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
 
   async function getProductDetail() {
     const result = await axios.get(`http://3.212.173.194/api/1.0/products/details?id=${id}`);
     setProduct(result.data.data ? result.data.data : null);
+    setColor(result.data.data.colors[0].code);
   }
 
   function handleCounter(event, type) {
@@ -21,6 +24,10 @@ function ProductPage() {
       if (counter === 0) return;
       setCounter((counter) => counter - 1);
     }
+  }
+
+  function onSelectSize(event, size) {
+    setSize(size);
   }
 
   useEffect(() => {
@@ -40,7 +47,13 @@ function ProductPage() {
               <span>顏色</span>
               <div className={styles.colorBoxes}>
                 {product?.colors?.map((color, i) => {
-                  return <div key={i} style={{ backgroundColor: `#${color.code}` }}></div>;
+                  return (
+                    <div
+                      key={i}
+                      className={color.code === selectedColor ? styles.colorActive : ""}
+                      style={{ backgroundColor: `#${color.code}` }}
+                    ></div>
+                  );
                 })}
               </div>
             </div>
@@ -48,7 +61,15 @@ function ProductPage() {
               <span>尺寸</span>
               <div className={styles.sizesBoxes}>
                 {product?.sizes?.map((size, i) => {
-                  return <div key={i}>{size}</div>;
+                  return (
+                    <div
+                      key={i}
+                      className={size === selectedSize ? styles.sizeActive : ""}
+                      onClick={(event) => onSelectSize(event, size)}
+                    >
+                      {size}
+                    </div>
+                  );
                 })}
               </div>
             </div>
