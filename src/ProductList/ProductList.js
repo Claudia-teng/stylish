@@ -6,8 +6,8 @@ function ProductList({ products }) {
   return (
     <>
       <div className={styles.list}>
-        {!products.length && <p>查無商品</p>}
-        {products.map((product, i) => {
+        {!products?.length && <p>查無商品</p>}
+        {products?.map((product, i) => {
           return (
             <Link key={i} to={`/product?id=${product.id}`}>
               <Product product={product} />

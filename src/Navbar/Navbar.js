@@ -37,6 +37,7 @@ function Navbar({ onSearchProduct, handleKeyPress, keyword, setKeyword }) {
   let activeStyle = {
     color: "#8B572A",
   };
+
   return (
     <>
       <nav className={styles.nav}>
