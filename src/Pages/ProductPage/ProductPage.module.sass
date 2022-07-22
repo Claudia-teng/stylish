@@ -1,35 +1,43 @@
 .container
-  width: 50%
+  width: 55%
   margin: 0 auto
+  > img
+    width: 100%
+    margin-bottom: 1rem
 .contents
   display: flex
+  margin-bottom: 2rem
   > div
     flex: 1
-    padding: 0.5rem
     margin: 1rem
   img
     flex: 1.5
     margin: 1rem
-  h1, h2, h3, h4, h5, h6, p
+  h2, h3, h4, h5, h6, p
+    font-weight: 400
     margin: 1rem 0rem
   h1
+    font-weight: 400
     letter-spacing: 6px
     font-size: 1.5rem
+    margin-top: 0rem
   h2 
     margin-top: 2rem
     font-weight: 400
     padding-bottom: 1rem
     border-bottom: 1px solid black
   h6
-    font-family: Noto Sans TC
     font-size: 1rem
     letter-spacing: 6px
     color: #BABABA
   .color, .size, .count
+    display: flex
+    align-items: center
     margin: 2rem 0rem
     span
       padding-right: 1rem
       border-right: 1px solid black
+      margin-right: 1rem
   button
     cursor: pointer
     letter-spacing: 6px
@@ -39,3 +47,46 @@
     width: 100%
     padding: 1rem 0.5rem
     border: none
+    margin-bottom: 1.5rem
+  .colorBoxes
+    display: flex
+    > div
+      cursor: pointer
+      width: 1.2rem
+      height: 1.2rem
+      border: 1px solid #D3D3D3
+      margin: 0rem 0.5rem
+  .sizesBoxes
+    display: flex
+    > div
+      cursor: pointer
+      background-color: #000000
+      color: #ffffff
+      width: 1.2rem
+      height: 1.2rem
+      border-radius: 16px
+      padding: 0.2rem
+      display: flex
+      align-items: center
+      justify-content: center
+      margin: 0rem 0.5rem
+  h3 
+    margin: 0
+    font-size: 1rem
+  h3.texture
+    margin-top: 2rem
+  h3.description
+    margin-bottom: 2rem
+.moreDetail
+  display: flex
+  color: #8B572A
+  position: relative
+  margin-bottom: 2rem
+  &::after
+    content: ""
+    background-color: #3f3a3a
+    height: 1px
+    width: 80%
+    position: absolute
+    right: 0px
+    top: 10px
