@@ -136,7 +136,7 @@ function ProductPage() {
       return setError("信用卡資料有誤");
     }
 
-    if (!localStorage.get("jwt")) {
+    if (!localStorage.getItem("jwt")) {
       return setError("請先登入");
     }
 
