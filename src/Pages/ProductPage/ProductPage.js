@@ -18,6 +18,12 @@ function ProductPage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const id = searchParams.get("id");
+
+  const [name, setName] = useState("User");
+  const [email, setEmail] = useState("user@gmail.com");
+  const [address, setAddress] = useState("市政府站");
+  const [phone, setPhone] = useState("0927389243");
+  const [time, setTime] = useState("morning");
   const cardNumber = useRef(null);
   const cardExpirationDate = useRef(null);
   const ccv = useRef(null);
@@ -39,11 +45,11 @@ function ProductPage() {
   }
 
   function checkStock(color, size, product) {
-    console.log("color, size", color, size);
+    // console.log("color, size", color, size);
     let index = product.variants.findIndex((variant) => {
       return variant.color_code === color.code && variant.size === size;
     });
-    console.log("stock", product.variants[index].stock);
+    // console.log("stock", product.variants[index].stock);
     setStock(product.variants[index].stock);
   }
 
@@ -68,10 +74,7 @@ function ProductPage() {
   }
 
   function paymentSetUp() {
-    console.log("hasProduct", hasProduct);
-    console.log("cardNumber", cardNumber);
     getTPDirect().then((TPDirect) => {
-      console.log(TPDirect);
       TPDirect.setupSDK(12348, "app_pa1pQcKoY22IlnSXq5m5WP5jFKzoRG58VEXpT7wU62ud7mMbDOGzCYIlzzLF", "sandbox");
       TPDirect.card.setup({
         fields: {
@@ -131,11 +134,37 @@ function ProductPage() {
     });
   }
 
+  function isValidEmail(email) {
+    return /\S+@\S+\.\S+/.test(email);
+  }
+
+  function isValidPhone(phone) {
+    return /((?=(09))[0-9]{10})$/.test(phone);
+  }
+
   function onSubmit() {
     setError("");
     if (counter === 0) {
       return setError("請購買至少一個商品");
     }
+
+    if (!name || !email || !address || !phone || !time) {
+      return setError("請輸入完整收件者資訊");
+    }
+
+    if (!isValidEmail(email)) {
+      return setError("Email格式不符");
+    }
+
+    if (!isValidPhone(phone)) {
+      return setError("電話格式不符（09xxxxxxxx）");
+    }
+
+    const times = ["morning", "afternoon", "anytime"];
+    if (!times.includes(time)) {
+      return setError("收件時間格式不符");
+    }
+
     const tappayStatus = TPDirect.card.getTappayFieldsStatus();
 
     if (tappayStatus.canGetPrime === false) {
@@ -150,7 +179,7 @@ function ProductPage() {
       if (result?.status !== 0) {
         return setError("交易失敗");
       }
-      console.log(result.card.prime);
+      // console.log(result.card.prime);
 
       const data = {
         prime: result.card.prime,
@@ -161,11 +190,11 @@ function ProductPage() {
           freight: 20,
           total: product.price * counter + 20,
           recipient: {
-            name: "user1",
-            phone: "0987654321",
-            email: "user1@gmail.com",
-            address: "市政府站",
-            time: "morning",
+            name: name,
+            phone: phone,
+            email: email,
+            address: address,
+            time: time,
           },
           list: [
             {
@@ -182,7 +211,7 @@ function ProductPage() {
           ],
         },
       };
-      console.log("data", data);
+      // console.log("data", data);
 
       const headers = {
         "Content-Type": "application/json",
@@ -194,7 +223,6 @@ function ProductPage() {
           headers: headers,
         })
         .then((response) => {
-          console.log("response", response);
           setSuccess("購買成功！");
         })
         .catch((error) => {
@@ -279,8 +307,16 @@ function ProductPage() {
             <div className={styles.checkoutTitle}>結帳</div>
             <div className={styles.checkout}>
               <form>
-                {/* <label>收件者姓名</label>
-              <input ref={nameInput} /> */}
+                <label>收件者姓名</label>
+                <input value={name} onChange={(e) => setName(e.target.value)} />
+                <label>收件者Email</label>
+                <input value={email} onChange={(e) => setEmail(e.target.value)} />
+                <label>收件者地址</label>
+                <input value={address} onChange={(e) => setAddress(e.target.value)} />
+                <label>收件者電話</label>
+                <input value={phone} onChange={(e) => setPhone(e.target.value)} />
+                <label>收件時間（morning / afternoon / anytime）</label>
+                <input value={time} onChange={(e) => setTime(e.target.value)} />
                 <div id="product ID"></div>
                 <label>Card Number</label>
                 <div id="cardview-container"></div>

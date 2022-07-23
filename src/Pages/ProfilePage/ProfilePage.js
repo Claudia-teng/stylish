@@ -13,7 +13,6 @@ function Profile({ setHasLogin }) {
     const result = await axios.get(`http://3.212.173.194/api/1.0/user/profile`, {
       headers: { Authorization: `Bearer ${token}` },
     });
-    console.log("result.data.data", result.data.data);
     setProfile(result.data.data);
   }
 
