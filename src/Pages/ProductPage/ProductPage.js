@@ -1,18 +1,20 @@
+/* eslint-disable no-undef */
 import axios from "axios";
 import styles from "./ProductPage.module.sass";
 import { useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import loadingGif from "../../assets/loading.gif";
 
-function ProductPage() {
+function ProductPage({ hasLogin }) {
   const [product, setProduct] = useState({});
   const [counter, setCounter] = useState(0);
-  const [selectedColor, setColor] = useState("");
+  const [selectedColor, setColor] = useState({});
   const [selectedSize, setSize] = useState("S");
   const [stock, setStock] = useState("S");
   const [searchParams] = useSearchParams();
   const [hasProduct, setHasProduct] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const id = searchParams.get("id");
 
   async function getProductDetail() {
@@ -21,7 +23,7 @@ function ProductPage() {
       const result = await axios.get(`http://3.212.173.194/api/1.0/products/details?id=${id}`);
       setHasProduct(true);
       setProduct(result.data.data ? result.data.data : null);
-      setColor(result.data.data.colors[0].code);
+      setColor(result.data.data.colors[0]);
       // setLoading(false);
     } catch (err) {
       setHasProduct(false);
@@ -29,8 +31,9 @@ function ProductPage() {
   }
 
   function checkStock(color, size) {
+    // console.log(color, size);
     let index = product.variants?.findIndex((variant) => {
-      return variant.color_code === color && variant.size === size;
+      return variant.color_code === color.code && variant.size === size;
     });
     setStock(product.variants[index].stock);
   }
@@ -50,12 +53,142 @@ function ProductPage() {
   }
 
   function onSelectColor(event, color) {
-    setColor(color.code);
+    setColor(color);
     setCounter(0);
-    checkStock(color.code, selectedSize);
+    checkStock(color, selectedSize);
+  }
+
+  function paymentSetUp() {
+    getTPDirect().then((TPDirect) => {
+      console.log(TPDirect);
+      TPDirect.setupSDK(12348, "app_pa1pQcKoY22IlnSXq5m5WP5jFKzoRG58VEXpT7wU62ud7mMbDOGzCYIlzzLF", "sandbox");
+      TPDirect.card.setup({
+        fields: {
+          number: {
+            // css selector
+            element: "#card-number",
+            placeholder: "**** **** **** ****",
+          },
+          expirationDate: {
+            // DOM object
+            element: document.getElementById("card-expiration-date"),
+            placeholder: "MM / YY",
+          },
+          ccv: {
+            element: "#card-ccv",
+            placeholder: "ccv",
+          },
+        },
+        styles: {
+          // Style all elements
+          input: {
+            color: "gray",
+          },
+          // Styling ccv field
+          "input.ccv": {
+            // 'font-size': '16px'
+          },
+          // Styling expiration-date field
+          "input.expiration-date": {
+            // 'font-size': '16px'
+          },
+          // Styling card-number field
+          "input.card-number": {
+            // 'font-size': '16px'
+          },
+          // style focus state
+          ":focus": {
+            // 'color': 'black'
+          },
+          // style valid state
+          ".valid": {
+            color: "green",
+          },
+          // style invalid state
+          ".invalid": {
+            color: "red",
+          },
+          // Media queries
+          // Note that these apply to the iframe, not the root window.
+          "@media screen and (max-width: 400px)": {
+            input: {
+              color: "orange",
+            },
+          },
+        },
+      });
+    });
+  }
+
+  function onSubmit() {
+    setError("");
+    if (counter === 0) {
+      return setError("請購買至少一個商品");
+    }
+    const tappayStatus = TPDirect.card.getTappayFieldsStatus();
+
+    if (tappayStatus.canGetPrime === false) {
+      return setError("信用卡資料有誤");
+    }
+
+    TPDirect.card.getPrime(async (result) => {
+      if (result?.status !== 0) {
+        return setError("交易失敗");
+      }
+      console.log(result.card.prime);
+
+      const data = {
+        prime: result.card.prime,
+        order: {
+          shipping: "delivery",
+          payment: "credit_card",
+          subtotal: product.price * counter,
+          freight: 20,
+          total: product.price * counter + 20,
+          recipient: {
+            name: "user1",
+            phone: "0987654321",
+            email: "user1@gmail.com",
+            address: "市政府站",
+            time: "morning",
+          },
+          list: [
+            {
+              id: product.id,
+              name: product.title,
+              price: product.price,
+              color: {
+                code: selectedColor.code,
+                name: selectedColor.name,
+              },
+              size: selectedSize,
+              qty: counter,
+            },
+          ],
+        },
+      };
+      console.log("data", data);
+
+      const headers = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+      };
+
+      axios
+        .post("http://3.212.173.194/api/1.0/order/checkout", data, {
+          headers: headers,
+        })
+        .then((response) => {
+          console.log("response", response);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    });
   }
 
   useEffect(() => {
+    paymentSetUp();
     getProductDetail();
   }, []);
 
@@ -79,7 +212,7 @@ function ProductPage() {
                         <div
                           key={i}
                           onClick={(event) => onSelectColor(event, color)}
-                          className={color.code === selectedColor ? styles.colorActive : ""}
+                          className={color.code === selectedColor.code ? styles.colorActive : ""}
                           style={{ backgroundColor: `#${color.code}` }}
                         ></div>
                       );
@@ -124,6 +257,27 @@ function ProductPage() {
                 <h3>產地：{product.place}</h3>
               </div>
             </div>
+            <div className={styles.checkoutTitle}>結帳</div>
+            {/* {!hasLogin && <p className={styles.checkoutHint}>請先登入再購買</p>} */}
+
+            <div className={styles.checkout}>
+              <form>
+                <div id="product ID"></div>
+                <label>Card Number</label>
+                <div id="cardview-container"></div>
+                <div className={styles.tpfield} id="card-number"></div>
+                <label>Expiration Date</label>
+                <div className={styles.tpfield} id="card-expiration-date"></div>
+                <label>CCV</label>
+                <div className={styles.tpfield} id="card-ccv"></div>
+                <button className={styles.payBtn} type="button" id="submit" onClick={onSubmit}>
+                  送出
+                </button>
+                <p>{error}</p>
+                <p>{success}</p>
+              </form>
+            </div>
+
             <div className={styles.moreDetail}>更多產品資訊</div>
             <p>{product.story}</p>
             <img alt="other_image1" src={product?.images?.length ? product.images[0] : null} />
@@ -136,3 +290,24 @@ function ProductPage() {
 }
 
 export default ProductPage;
+
+export function getTPDirect() {
+  return new Promise((resolve, reject) => {
+    if (typeof window.TPDirect !== "undefined") {
+      return resolve(window.TPDirect);
+    } else {
+      const script = window.document.createElement("script");
+      script.src = "https://js.tappaysdk.com/tpdirect/v5.8.0";
+      script.async = true;
+      script.onload = () => {
+        if (typeof window.TPDirect !== "undefined") {
+          resolve(window.TPDirect);
+        } else {
+          reject(new Error("failed to load TapPay sdk"));
+        }
+      };
+      script.onerror = reject;
+      window.document.body.appendChild(script);
+    }
+  });
+}

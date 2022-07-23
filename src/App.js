@@ -42,7 +42,7 @@ function App() {
         <ScrollToTop />
         <Routes>
           <Route path="/" element={<Index keyword={keyword} products={products} setProducts={setProducts} />}></Route>
-          <Route path="/product" element={<ProductPage />}></Route>
+          <Route path="/product" element={<ProductPage hasLogin={hasLogin} />}></Route>
           <Route path="/cart" element={<Cart />}></Route>
           <Route path="/login" element={<LoginPage setHasLogin={setHasLogin} />}></Route>
           <Route path="/profile" element={<Profile setHasLogin={setHasLogin} />}></Route>
