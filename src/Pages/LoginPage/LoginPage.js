@@ -9,13 +9,21 @@ function LoginPage() {
   // signin
   const [signInEmail, setSignInEmail] = useState("");
   const [signInPassword, setSignInPassword] = useState("");
+  const [signInError, setSignInError] = useState("");
 
   // signup
   const [signUpUsername, setSignUpUsername] = useState("");
   const [signUpEmail, setSignUpEmail] = useState("");
   const [signUpPassword, setSignUpPassword] = useState("");
 
+  function isValidEmail(email) {
+    return /\S+@\S+\.\S+/.test(email);
+  }
+
   async function onSignIn() {
+    if (!isValidEmail(signInEmail)) {
+      return signInError("Please enter a valid email.");
+    }
     const data = {
       email: signInEmail,
       password: signInPassword,
