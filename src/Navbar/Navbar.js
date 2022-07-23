@@ -40,7 +40,7 @@ function Navbar({ hasLogin, onSearchProduct, handleKeyPress, keyword, setKeyword
   };
 
   useEffect(() => {
-    localStorage.getItem("jwt");
+    setHasToken(localStorage.getItem("jwt") ? true : false);
   }, []);
 
   return (
@@ -82,12 +82,12 @@ function Navbar({ hasLogin, onSearchProduct, handleKeyPress, keyword, setKeyword
               <div>1</div>
             </div>
           </NavLink>
-          {!hasLogin && (
+          {!hasToken && (
             <NavLink to="/login">
               <img alt="profile" src={memberIcon} onMouseOver={onMemberHover} onMouseOut={onMemberHover} />
             </NavLink>
           )}
-          {hasLogin && (
+          {hasToken && (
             <NavLink to="/profile">
               <img alt="profile" src={memberIcon} onMouseOver={onMemberHover} onMouseOut={onMemberHover} />
             </NavLink>

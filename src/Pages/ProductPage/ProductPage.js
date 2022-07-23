@@ -4,7 +4,7 @@ import styles from "./ProductPage.module.sass";
 import { useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-function ProductPage({ hasLogin }) {
+function ProductPage() {
   const [product, setProduct] = useState({});
   const [counter, setCounter] = useState(0);
   const [selectedColor, setColor] = useState({});
@@ -15,6 +15,7 @@ function ProductPage({ hasLogin }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [hasToken, setHasToken] = useState(false);
   const id = searchParams.get("id");
 
   async function getProductDetail() {
@@ -190,6 +191,7 @@ function ProductPage({ hasLogin }) {
   useEffect(() => {
     paymentSetUp();
     getProductDetail();
+    setHasToken(localStorage.getItem("jwt") ? true : false);
   }, []);
 
   return (
@@ -258,25 +260,26 @@ function ProductPage({ hasLogin }) {
               </div>
             </div>
             <div className={styles.checkoutTitle}>結帳</div>
-            {/* {!hasLogin && <p className={styles.checkoutHint}>請先登入再購買</p>} */}
-
-            <div className={styles.checkout}>
-              <form>
-                <div id="product ID"></div>
-                <label>Card Number</label>
-                <div id="cardview-container"></div>
-                <div className={styles.tpfield} id="card-number"></div>
-                <label>Expiration Date</label>
-                <div className={styles.tpfield} id="card-expiration-date"></div>
-                <label>CCV</label>
-                <div className={styles.tpfield} id="card-ccv"></div>
-                <button className={styles.payBtn} type="button" id="submit" onClick={onSubmit}>
-                  送出
-                </button>
-                <p>{error}</p>
-                <p>{success}</p>
-              </form>
-            </div>
+            {!hasToken && <p className={styles.checkoutHint}>請先登入再購買</p>}
+            {hasToken && (
+              <div className={styles.checkout}>
+                <form>
+                  <div id="product ID"></div>
+                  <label>Card Number</label>
+                  <div id="cardview-container"></div>
+                  <div className={styles.tpfield} id="card-number"></div>
+                  <label>Expiration Date</label>
+                  <div className={styles.tpfield} id="card-expiration-date"></div>
+                  <label>CCV</label>
+                  <div className={styles.tpfield} id="card-ccv"></div>
+                  <button className={styles.payBtn} type="button" id="submit" onClick={onSubmit}>
+                    送出
+                  </button>
+                  <p>{error}</p>
+                  <p>{success}</p>
+                </form>
+              </div>
+            )}
 
             <div className={styles.moreDetail}>更多產品資訊</div>
             <p>{product.story}</p>
