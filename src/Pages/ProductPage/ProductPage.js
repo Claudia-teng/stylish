@@ -264,26 +264,26 @@ function ProductPage() {
               </div>
             </div>
             <div className={styles.checkoutTitle}>結帳</div>
-            {!hasToken && <p className={styles.checkoutHint}>請先登入再購買</p>}
-            {hasToken && (
-              <div className={styles.checkout}>
-                <form>
-                  <div id="product ID"></div>
-                  <label>Card Number</label>
-                  <div id="cardview-container"></div>
-                  <div className={styles.tpfield} ref={cardNumber}></div>
-                  <label>Expiration Date</label>
-                  <div className={styles.tpfield} ref={cardExpirationDate}></div>
-                  <label>CCV</label>
-                  <div className={styles.tpfield} ref={ccv}></div>
-                  <button className={styles.payBtn} type="button" id="submit" onClick={onSubmit}>
-                    送出
-                  </button>
-                  <p>{error}</p>
-                  <p>{success}</p>
-                </form>
-              </div>
-            )}
+            {/* {!hasToken && <p className={styles.checkoutHint}>請先登入再購買</p>}
+            {hasToken && ( */}
+            <div className={styles.checkout}>
+              <form>
+                <div id="product ID"></div>
+                <label>Card Number</label>
+                <div id="cardview-container"></div>
+                <div className={styles.tpfield} ref={cardNumber}></div>
+                <label>Expiration Date</label>
+                <div className={styles.tpfield} ref={cardExpirationDate}></div>
+                <label>CCV</label>
+                <div className={styles.tpfield} ref={ccv}></div>
+                <button className={styles.payBtn} type="button" id="submit" onClick={onSubmit}>
+                  送出
+                </button>
+                <p>{error}</p>
+                <p>{success}</p>
+              </form>
+            </div>
+            {/* )} */}
 
             <div className={styles.moreDetail}>更多產品資訊</div>
             <p>{product.story}</p>
