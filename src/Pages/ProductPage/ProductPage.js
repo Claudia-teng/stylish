@@ -21,7 +21,6 @@ function ProductPage() {
   const cardNumber = useRef(null);
   const cardExpirationDate = useRef(null);
   const ccv = useRef(null);
-  const nameInput = useRef(null);
 
   async function getProductDetail() {
     try {
@@ -32,7 +31,6 @@ function ProductPage() {
       setColor(result.data.data.colors[0]);
       setSize(result.data.data.sizes[0]);
       checkStock(result.data.data.colors[0], result.data.data.sizes[0], result.data.data);
-      paymentSetUp();
       setLoading(false);
     } catch (err) {
       navigate("/not-found", { replace: true });
@@ -70,7 +68,7 @@ function ProductPage() {
   }
 
   function paymentSetUp() {
-    console.log("nameInput", nameInput);
+    console.log("hasProduct", hasProduct);
     console.log("cardNumber", cardNumber);
     getTPDirect().then((TPDirect) => {
       console.log(TPDirect);
@@ -209,97 +207,101 @@ function ProductPage() {
     getProductDetail();
   }, []);
 
+  useEffect(() => {
+    paymentSetUp();
+  }, [hasProduct]);
+
   return (
     <>
       <div className={styles.container}>
         {!hasProduct && !loading && <p className={styles.notFound}>找不到商品</p>}
-        {/* {hasProduct && ( */}
-        <>
-          <div className={styles.contents}>
-            <img alt="main_image" src={product.main_image} />
-            <div>
-              <h1>{product.title}</h1>
-              <h6>{product.id}</h6>
-              <h2>TWD.{product.price}</h2>
-              <div className={styles.color}>
-                <span>顏色</span>
-                <div className={styles.colorBoxes}>
-                  {product?.colors?.map((color, i) => {
-                    return (
-                      <div
-                        key={i}
-                        onClick={(event) => onSelectColor(event, color)}
-                        className={color.code === selectedColor.code ? styles.colorActive : ""}
-                        style={{ backgroundColor: `#${color.code}` }}
-                      ></div>
-                    );
-                  })}
+        {hasProduct && (
+          <>
+            <div className={styles.contents}>
+              <img alt="main_image" src={product.main_image} />
+              <div>
+                <h1>{product.title}</h1>
+                <h6>{product.id}</h6>
+                <h2>TWD.{product.price}</h2>
+                <div className={styles.color}>
+                  <span>顏色</span>
+                  <div className={styles.colorBoxes}>
+                    {product?.colors?.map((color, i) => {
+                      return (
+                        <div
+                          key={i}
+                          onClick={(event) => onSelectColor(event, color)}
+                          className={color.code === selectedColor.code ? styles.colorActive : ""}
+                          style={{ backgroundColor: `#${color.code}` }}
+                        ></div>
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
-              <div className={styles.size}>
-                <span>尺寸</span>
-                <div className={styles.sizesBoxes}>
-                  {product?.sizes?.map((size, i) => {
-                    return (
-                      <div
-                        key={i}
-                        className={size === selectedSize ? styles.sizeActive : ""}
-                        onClick={(event) => onSelectSize(event, size)}
-                      >
-                        {size}
-                      </div>
-                    );
-                  })}
+                <div className={styles.size}>
+                  <span>尺寸</span>
+                  <div className={styles.sizesBoxes}>
+                    {product?.sizes?.map((size, i) => {
+                      return (
+                        <div
+                          key={i}
+                          className={size === selectedSize ? styles.sizeActive : ""}
+                          onClick={(event) => onSelectSize(event, size)}
+                        >
+                          {size}
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
-              <div className={styles.count}>
-                <span>數量</span>
-                <div className={`${styles.counter}`}>
-                  <button onClick={(event) => handleCounter(event, "minus")} disabled={counter === 0}>
-                    -
-                  </button>
-                  <p>{counter}</p>
-                  <button onClick={(event) => handleCounter(event, "plus")} disabled={counter === stock}>
-                    +
-                  </button>
+                <div className={styles.count}>
+                  <span>數量</span>
+                  <div className={`${styles.counter}`}>
+                    <button onClick={(event) => handleCounter(event, "minus")} disabled={counter === 0}>
+                      -
+                    </button>
+                    <p>{counter}</p>
+                    <button onClick={(event) => handleCounter(event, "plus")} disabled={counter === stock}>
+                      +
+                    </button>
+                  </div>
                 </div>
+                <button className={styles.cartBtn} disabled={counter === 0}>
+                  加入購物車
+                </button>
+                <h3>{product.note}</h3>
+                <h3 className={styles.texture}>{product.texture}</h3>
+                <h3 className={styles.description} dangerouslySetInnerHTML={{ __html: product.description }}></h3>
+                <h3>清洗：{product.wash}</h3>
+                <h3>產地：{product.place}</h3>
               </div>
-              <button className={styles.cartBtn} disabled={counter === 0}>
-                加入購物車
-              </button>
-              <h3>{product.note}</h3>
-              <h3 className={styles.texture}>{product.texture}</h3>
-              <h3 className={styles.description} dangerouslySetInnerHTML={{ __html: product.description }}></h3>
-              <h3>清洗：{product.wash}</h3>
-              <h3>產地：{product.place}</h3>
             </div>
-          </div>
-          <div className={styles.checkoutTitle}>結帳</div>
-          <div className={styles.checkout}>
-            <form>
-              {/* <label>收件者姓名</label>
+            <div className={styles.checkoutTitle}>結帳</div>
+            <div className={styles.checkout}>
+              <form>
+                {/* <label>收件者姓名</label>
               <input ref={nameInput} /> */}
-              <div id="product ID"></div>
-              <label>Card Number</label>
-              <div id="cardview-container"></div>
-              <div className={styles.tpfield} ref={cardNumber}></div>
-              <label>Expiration Date</label>
-              <div className={styles.tpfield} ref={cardExpirationDate}></div>
-              <label>CCV</label>
-              <div className={styles.tpfield} ref={ccv}></div>
-              <button className={styles.payBtn} type="button" id="submit" onClick={onSubmit}>
-                送出
-              </button>
-              <p className={styles.error}>{error}</p>
-              <p className={styles.success}>{success}</p>
-            </form>
-          </div>
-          <div className={styles.moreDetail}>更多產品資訊</div>
-          <p>{product.story}</p>
-          <img alt="other_image1" src={product?.images?.length ? product.images[0] : null} />
-          <img alt="other_image2" src={product?.images?.length ? product.images[1] : null} />
-        </>
-        {/* )} */}
+                <div id="product ID"></div>
+                <label>Card Number</label>
+                <div id="cardview-container"></div>
+                <div className={styles.tpfield} ref={cardNumber}></div>
+                <label>Expiration Date</label>
+                <div className={styles.tpfield} ref={cardExpirationDate}></div>
+                <label>CCV</label>
+                <div className={styles.tpfield} ref={ccv}></div>
+                <button className={styles.payBtn} type="button" id="submit" onClick={onSubmit}>
+                  送出
+                </button>
+                <p className={styles.error}>{error}</p>
+                <p className={styles.success}>{success}</p>
+              </form>
+            </div>
+            <div className={styles.moreDetail}>更多產品資訊</div>
+            <p>{product.story}</p>
+            <img alt="other_image1" src={product?.images?.length ? product.images[0] : null} />
+            <img alt="other_image2" src={product?.images?.length ? product.images[1] : null} />
+          </>
+        )}
       </div>
     </>
   );
