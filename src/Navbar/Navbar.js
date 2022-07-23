@@ -68,14 +68,16 @@ function Navbar({ hasLogin, onSearchProduct, handleKeyPress, keyword, setKeyword
         </ul>
         <div className={styles.buttons}>
           <input value={keyword} onChange={onInputChange} onKeyUp={handleKeyPress}></input>
-          <img
-            className={styles.searchIcon}
-            alt="search"
-            src={searchIcon}
-            onClick={onSearchProduct}
-            onMouseOver={onSearchHover}
-            onMouseOut={onSearchHover}
-          />
+          <NavLink to="/">
+            <img
+              className={styles.searchIcon}
+              alt="search"
+              src={searchIcon}
+              onClick={onSearchProduct}
+              onMouseOver={onSearchHover}
+              onMouseOut={onSearchHover}
+            />
+          </NavLink>
           <NavLink to="/cart" style={({ isActive }) => (isActive ? activeStyle : undefined)}>
             <div className={styles.cart}>
               <img alt="cart" src={cartIcon} onMouseOver={onCartHover} onMouseOut={onCartHover} />

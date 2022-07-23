@@ -9,7 +9,7 @@ function ProductPage() {
   const [counter, setCounter] = useState(0);
   const [selectedColor, setColor] = useState({});
   const [selectedSize, setSize] = useState("S");
-  const [stock, setStock] = useState("S");
+  const [stock, setStock] = useState(0);
   const [searchParams] = useSearchParams();
   const [hasProduct, setHasProduct] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -19,6 +19,7 @@ function ProductPage() {
   const cardNumber = useRef(null);
   const cardExpirationDate = useRef(null);
   const ccv = useRef(null);
+  const nameInput = useRef(null);
 
   async function getProductDetail() {
     try {
@@ -27,18 +28,21 @@ function ProductPage() {
       setHasProduct(true);
       setProduct(result.data.data ? result.data.data : null);
       setColor(result.data.data.colors[0]);
+      setSize(result.data.data.sizes[0]);
+      checkStock(result.data.data.colors[0], result.data.data.sizes[0], result.data.data);
       paymentSetUp();
-      // setLoading(false);
+      setLoading(false);
     } catch (err) {
       setHasProduct(false);
     }
   }
 
-  function checkStock(color, size) {
-    // console.log(color, size);
-    let index = product.variants?.findIndex((variant) => {
+  function checkStock(color, size, product) {
+    console.log("color, size", color, size);
+    let index = product.variants.findIndex((variant) => {
       return variant.color_code === color.code && variant.size === size;
     });
+    console.log("stock", product.variants[index].stock);
     setStock(product.variants[index].stock);
   }
 
@@ -53,16 +57,17 @@ function ProductPage() {
   function onSelectSize(event, size) {
     setSize(size);
     setCounter(0);
-    checkStock(selectedColor, size);
+    checkStock(selectedColor, size, product);
   }
 
   function onSelectColor(event, color) {
     setColor(color);
     setCounter(0);
-    checkStock(color, selectedSize);
+    checkStock(color, selectedSize, product);
   }
 
   function paymentSetUp() {
+    console.log("nameInput", nameInput);
     console.log("cardNumber", cardNumber);
     getTPDirect().then((TPDirect) => {
       console.log(TPDirect);
@@ -205,91 +210,93 @@ function ProductPage() {
     <>
       <div className={styles.container}>
         {!hasProduct && !loading && <p className={styles.notFound}>找不到商品</p>}
-        {hasProduct && (
-          <>
-            <div className={styles.contents}>
-              <img alt="main_image" src={product.main_image} />
-              <div>
-                <h1>{product.title}</h1>
-                <h6>{product.id}</h6>
-                <h2>TWD.{product.price}</h2>
-                <div className={styles.color}>
-                  <span>顏色</span>
-                  <div className={styles.colorBoxes}>
-                    {product?.colors?.map((color, i) => {
-                      return (
-                        <div
-                          key={i}
-                          onClick={(event) => onSelectColor(event, color)}
-                          className={color.code === selectedColor.code ? styles.colorActive : ""}
-                          style={{ backgroundColor: `#${color.code}` }}
-                        ></div>
-                      );
-                    })}
-                  </div>
+        {/* {hasProduct && ( */}
+        <>
+          <div className={styles.contents}>
+            <img alt="main_image" src={product.main_image} />
+            <div>
+              <h1>{product.title}</h1>
+              <h6>{product.id}</h6>
+              <h2>TWD.{product.price}</h2>
+              <div className={styles.color}>
+                <span>顏色</span>
+                <div className={styles.colorBoxes}>
+                  {product?.colors?.map((color, i) => {
+                    return (
+                      <div
+                        key={i}
+                        onClick={(event) => onSelectColor(event, color)}
+                        className={color.code === selectedColor.code ? styles.colorActive : ""}
+                        style={{ backgroundColor: `#${color.code}` }}
+                      ></div>
+                    );
+                  })}
                 </div>
-                <div className={styles.size}>
-                  <span>尺寸</span>
-                  <div className={styles.sizesBoxes}>
-                    {product?.sizes?.map((size, i) => {
-                      return (
-                        <div
-                          key={i}
-                          className={size === selectedSize ? styles.sizeActive : ""}
-                          onClick={(event) => onSelectSize(event, size)}
-                        >
-                          {size}
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-                <div className={styles.count}>
-                  <span>數量</span>
-                  <div className={`${styles.counter}`}>
-                    <button onClick={(event) => handleCounter(event, "minus")} disabled={counter === 0}>
-                      -
-                    </button>
-                    <p>{counter}</p>
-                    <button onClick={(event) => handleCounter(event, "plus")} disabled={counter === stock}>
-                      +
-                    </button>
-                  </div>
-                </div>
-                <button className={styles.cartBtn} disabled={counter === 0}>
-                  加入購物車
-                </button>
-                <h3>{product.note}</h3>
-                <h3 className={styles.texture}>{product.texture}</h3>
-                <h3 className={styles.description} dangerouslySetInnerHTML={{ __html: product.description }}></h3>
-                <h3>清洗：{product.wash}</h3>
-                <h3>產地：{product.place}</h3>
               </div>
+              <div className={styles.size}>
+                <span>尺寸</span>
+                <div className={styles.sizesBoxes}>
+                  {product?.sizes?.map((size, i) => {
+                    return (
+                      <div
+                        key={i}
+                        className={size === selectedSize ? styles.sizeActive : ""}
+                        onClick={(event) => onSelectSize(event, size)}
+                      >
+                        {size}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+              <div className={styles.count}>
+                <span>數量</span>
+                <div className={`${styles.counter}`}>
+                  <button onClick={(event) => handleCounter(event, "minus")} disabled={counter === 0}>
+                    -
+                  </button>
+                  <p>{counter}</p>
+                  <button onClick={(event) => handleCounter(event, "plus")} disabled={counter === stock}>
+                    +
+                  </button>
+                </div>
+              </div>
+              <button className={styles.cartBtn} disabled={counter === 0}>
+                加入購物車
+              </button>
+              <h3>{product.note}</h3>
+              <h3 className={styles.texture}>{product.texture}</h3>
+              <h3 className={styles.description} dangerouslySetInnerHTML={{ __html: product.description }}></h3>
+              <h3>清洗：{product.wash}</h3>
+              <h3>產地：{product.place}</h3>
             </div>
-            <div className={styles.checkoutTitle}>結帳</div>
-            <div className={styles.checkout}>
-              <form>
-                <div id="product ID"></div>
-                <label>Card Number</label>
-                <div id="cardview-container"></div>
-                <div className={styles.tpfield} ref={cardNumber}></div>
-                <label>Expiration Date</label>
-                <div className={styles.tpfield} ref={cardExpirationDate}></div>
-                <label>CCV</label>
-                <div className={styles.tpfield} ref={ccv}></div>
-                <button className={styles.payBtn} type="button" id="submit" onClick={onSubmit}>
-                  送出
-                </button>
-                <p className={styles.error}>{error}</p>
-                <p className={styles.success}>{success}</p>
-              </form>
-            </div>
-            <div className={styles.moreDetail}>更多產品資訊</div>
-            <p>{product.story}</p>
-            <img alt="other_image1" src={product?.images?.length ? product.images[0] : null} />
-            <img alt="other_image2" src={product?.images?.length ? product.images[1] : null} />
-          </>
-        )}
+          </div>
+          <div className={styles.checkoutTitle}>結帳</div>
+          <div className={styles.checkout}>
+            <form>
+              {/* <label>收件者姓名</label>
+              <input ref={nameInput} /> */}
+              <div id="product ID"></div>
+              <label>Card Number</label>
+              <div id="cardview-container"></div>
+              <div className={styles.tpfield} ref={cardNumber}></div>
+              <label>Expiration Date</label>
+              <div className={styles.tpfield} ref={cardExpirationDate}></div>
+              <label>CCV</label>
+              <div className={styles.tpfield} ref={ccv}></div>
+              <button className={styles.payBtn} type="button" id="submit" onClick={onSubmit}>
+                送出
+              </button>
+              <p className={styles.error}>{error}</p>
+              <p className={styles.success}>{success}</p>
+            </form>
+          </div>
+          <div className={styles.moreDetail}>更多產品資訊</div>
+          <p>{product.story}</p>
+          <img alt="other_image1" src={product?.images?.length ? product.images[0] : null} />
+          <img alt="other_image2" src={product?.images?.length ? product.images[1] : null} />
+        </>
+        {/* )} */}
       </div>
     </>
   );
