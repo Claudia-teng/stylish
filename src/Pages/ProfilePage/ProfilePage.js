@@ -25,16 +25,16 @@ function Profile({ setHasLogin }) {
 
   useEffect(() => {
     getProfile();
-  }, [profile]);
+  }, []);
 
   return (
     <>
       <div className={styles.container}>
         <img alt="profile" src={profileIcon} />
         <label>使用者名稱</label>
-        <p>{profile?.user?.name}</p>
+        <p>{profile?.name}</p>
         <label>Email</label>
-        <p>{profile?.user?.email}</p>
+        <p>{profile?.email}</p>
         <div>
           <button onClick={onLogout}>登出</button>
         </div>
