@@ -15,7 +15,6 @@ function ProductPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const [hasToken, setHasToken] = useState(false);
   const id = searchParams.get("id");
   const cardNumber = useRef(null);
   const cardExpirationDate = useRef(null);
@@ -137,6 +136,10 @@ function ProductPage() {
       return setError("信用卡資料有誤");
     }
 
+    if (!localStorage.get("jwt")) {
+      return setError("請先登入");
+    }
+
     TPDirect.card.getPrime(async (result) => {
       if (result?.status !== 0) {
         return setError("交易失敗");
@@ -186,16 +189,16 @@ function ProductPage() {
         })
         .then((response) => {
           console.log("response", response);
+          setSuccess("購買成功！");
         })
         .catch((error) => {
-          console.log(error);
+          setError("購買失敗！");
         });
     });
   }
 
   useEffect(() => {
     getProductDetail();
-    // setHasToken(localStorage.getItem("jwt") ? true : false);
   }, []);
 
   return (
@@ -264,8 +267,6 @@ function ProductPage() {
               </div>
             </div>
             <div className={styles.checkoutTitle}>結帳</div>
-            {/* {!hasToken && <p className={styles.checkoutHint}>請先登入再購買</p>}
-            {hasToken && ( */}
             <div className={styles.checkout}>
               <form>
                 <div id="product ID"></div>
@@ -279,12 +280,10 @@ function ProductPage() {
                 <button className={styles.payBtn} type="button" id="submit" onClick={onSubmit}>
                   送出
                 </button>
-                <p>{error}</p>
-                <p>{success}</p>
+                <p className={styles.error}>{error}</p>
+                <p className={styles.success}>{success}</p>
               </form>
             </div>
-            {/* )} */}
-
             <div className={styles.moreDetail}>更多產品資訊</div>
             <p>{product.story}</p>
             <img alt="other_image1" src={product?.images?.length ? product.images[0] : null} />

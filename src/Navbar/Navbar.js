@@ -82,16 +82,9 @@ function Navbar({ hasLogin, onSearchProduct, handleKeyPress, keyword, setKeyword
               <div>1</div>
             </div>
           </NavLink>
-          {!hasToken && (
-            <NavLink to="/login">
-              <img alt="profile" src={memberIcon} onMouseOver={onMemberHover} onMouseOut={onMemberHover} />
-            </NavLink>
-          )}
-          {hasToken && (
-            <NavLink to="/profile">
-              <img alt="profile" src={memberIcon} onMouseOver={onMemberHover} onMouseOut={onMemberHover} />
-            </NavLink>
-          )}
+          <NavLink to={hasToken ? "/profile" : "/login"}>
+            <img alt="profile" src={memberIcon} onMouseOver={onMemberHover} onMouseOut={onMemberHover} />
+          </NavLink>
         </div>
       </nav>
     </>
