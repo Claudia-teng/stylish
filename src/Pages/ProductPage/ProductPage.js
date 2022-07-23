@@ -2,7 +2,7 @@
 import axios from "axios";
 import styles from "./ProductPage.module.sass";
 import { useSearchParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 function ProductPage() {
   const [product, setProduct] = useState({});
@@ -17,6 +17,9 @@ function ProductPage() {
   const [success, setSuccess] = useState("");
   const [hasToken, setHasToken] = useState(false);
   const id = searchParams.get("id");
+  const cardNumber = useRef(null);
+  const cardExpirationDate = useRef(null);
+  const ccv = useRef(null);
 
   async function getProductDetail() {
     try {
@@ -25,6 +28,7 @@ function ProductPage() {
       setHasProduct(true);
       setProduct(result.data.data ? result.data.data : null);
       setColor(result.data.data.colors[0]);
+      paymentSetUp();
       // setLoading(false);
     } catch (err) {
       setHasProduct(false);
@@ -60,6 +64,7 @@ function ProductPage() {
   }
 
   function paymentSetUp() {
+    console.log("cardNumber", cardNumber);
     getTPDirect().then((TPDirect) => {
       console.log(TPDirect);
       TPDirect.setupSDK(12348, "app_pa1pQcKoY22IlnSXq5m5WP5jFKzoRG58VEXpT7wU62ud7mMbDOGzCYIlzzLF", "sandbox");
@@ -67,16 +72,16 @@ function ProductPage() {
         fields: {
           number: {
             // css selector
-            element: "#card-number",
+            element: cardNumber.current,
             placeholder: "**** **** **** ****",
           },
           expirationDate: {
             // DOM object
-            element: document.getElementById("card-expiration-date"),
+            element: cardExpirationDate.current,
             placeholder: "MM / YY",
           },
           ccv: {
-            element: "#card-ccv",
+            element: ccv.current,
             placeholder: "ccv",
           },
         },
@@ -189,9 +194,8 @@ function ProductPage() {
   }
 
   useEffect(() => {
-    paymentSetUp();
     getProductDetail();
-    setHasToken(localStorage.getItem("jwt") ? true : false);
+    // setHasToken(localStorage.getItem("jwt") ? true : false);
   }, []);
 
   return (
@@ -267,11 +271,11 @@ function ProductPage() {
                   <div id="product ID"></div>
                   <label>Card Number</label>
                   <div id="cardview-container"></div>
-                  <div className={styles.tpfield} id="card-number"></div>
+                  <div className={styles.tpfield} ref={cardNumber}></div>
                   <label>Expiration Date</label>
-                  <div className={styles.tpfield} id="card-expiration-date"></div>
+                  <div className={styles.tpfield} ref={cardExpirationDate}></div>
                   <label>CCV</label>
-                  <div className={styles.tpfield} id="card-ccv"></div>
+                  <div className={styles.tpfield} ref={ccv}></div>
                   <button className={styles.payBtn} type="button" id="submit" onClick={onSubmit}>
                     送出
                   </button>
