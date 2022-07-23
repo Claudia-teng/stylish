@@ -39,6 +39,10 @@ function Navbar({ hasLogin, onSearchProduct, handleKeyPress, keyword, setKeyword
     color: "#8B572A",
   };
 
+  function checkToken() {
+    return localStorage.getItem("jwt") ? true : false;
+  }
+
   useEffect(() => {
     setHasToken(localStorage.getItem("jwt") ? true : false);
   }, []);
@@ -84,7 +88,7 @@ function Navbar({ hasLogin, onSearchProduct, handleKeyPress, keyword, setKeyword
               <div>1</div>
             </div>
           </NavLink>
-          <NavLink to={hasToken ? "/profile" : "/login"}>
+          <NavLink to={checkToken() ? "/profile" : "/login"}>
             <img alt="profile" src={memberIcon} onMouseOver={onMemberHover} onMouseOut={onMemberHover} />
           </NavLink>
         </div>
