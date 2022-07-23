@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./Pages/Index.js";
-import Cart from "./Pages/Cart.js";
+import Cart from "./Pages/Cart/Cart";
 import Profile from "./Pages/ProfilePage/ProfilePage.js";
 import LoginPage from "./Pages/LoginPage/LoginPage.js";
 import ProductPage from "./Pages/ProductPage/ProductPage.js";

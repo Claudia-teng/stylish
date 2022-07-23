@@ -6,7 +6,7 @@ import member from "../assets/member.png";
 import memberHover from "../assets/member-hover.png";
 import search from "../assets/search.png";
 import searchHover from "../assets/search-hover.png";
-import { Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useState } from "react";
 
 function Navbar({ onSearchProduct, keyword, setKeyword }) {
