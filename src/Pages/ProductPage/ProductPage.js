@@ -236,7 +236,7 @@ function ProductPage() {
   }, []);
 
   useEffect(() => {
-    paymentSetUp();
+    if (hasProduct) paymentSetUp();
   }, [hasProduct]);
 
   return (
