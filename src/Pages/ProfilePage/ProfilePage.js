@@ -1,26 +1,42 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import profileIcon from "../../assets/profile.png";
 import styles from "./ProfilePage.module.sass";
 
 function Profile() {
+  let navigate = useNavigate();
   const [profile, setProfile] = useState({});
 
-  // async function getProfile() {
-  //   const result = await axios.get(`http://3.212.173.194/api/1.0/user/profile`);
-  //   setProfile(result.data.data);
-  // }
+  async function getProfile() {
+    let token = localStorage.getItem("jwt");
+    // const result = await axios.get(`http://3.212.173.194/api/1.0/user/profile`, {
+    //   headers: { Authorization: `Bearer ${token}` },
+    // });
+    // console.log("result", result);
+    // setProfile(result.data.data);
+  }
 
-  // useEffect(() => {
-  //   getProfile();
-  // }, []);
+  function onLogout() {
+    localStorage.removeItem("jwt");
+    navigate("/", { replace: true });
+  }
+
+  useEffect(() => {
+    getProfile();
+  }, []);
 
   return (
     <>
       <div className={styles.container}>
         <img alt="profile" src={profileIcon} />
-        {/* <p>{profile.name}</p>
-        <p>{profile.email}</p> */}
+        <label>使用者名稱</label>
+        <p>aaa</p>
+        <label>Email</label>
+        <p>aaa</p>
+        <div>
+          <button onClick={onLogout}>登出</button>
+        </div>
       </div>
     </>
   );
