@@ -3,8 +3,10 @@ import axios from "axios";
 import styles from "./ProductPage.module.sass";
 import { useSearchParams } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
 function ProductPage() {
+  let navigate = useNavigate();
   const [product, setProduct] = useState({});
   const [counter, setCounter] = useState(0);
   const [selectedColor, setColor] = useState({});
@@ -33,6 +35,7 @@ function ProductPage() {
       paymentSetUp();
       setLoading(false);
     } catch (err) {
+      navigate("/not-found", { replace: true });
       setHasProduct(false);
     }
   }

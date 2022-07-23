@@ -2,14 +2,19 @@ import Banner from "../Banner/Banner";
 import ProductList from "../ProductList/ProductList";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 function Index({ products, setProducts }) {
+  let navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   let params = useParams();
   let category = params.category || "all";
 
   async function getProduct(category) {
+    const categories = ["all", "women", "men", "accessories"];
+    if (!categories.includes(category)) {
+      navigate("/not-found", { replace: true });
+    }
     setLoading(true);
     setProducts([]);
     const result = await axios.get(`http://3.212.173.194/api/1.0/products/${category}`);

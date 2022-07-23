@@ -7,6 +7,7 @@ import ProductPage from "./Pages/ProductPage/ProductPage.js";
 import Navbar from "./Navbar/Navbar";
 import Footer from "./Footer/Footer";
 import ScrollToTop from "./ScrollToTop";
+import NotFound from "./NotFound/NotFound";
 import axios from "axios";
 import { useState } from "react";
 
@@ -50,6 +51,7 @@ function App() {
             path="/:category"
             element={<Index keyword={keyword} products={products} setProducts={setProducts} />}
           ></Route>
+          <Route path="/not-found" element={<NotFound />}></Route>
         </Routes>
         <Footer />
       </BrowserRouter>
