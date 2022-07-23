@@ -13,6 +13,7 @@ import { useState } from "react";
 function App() {
   const [keyword, setKeyword] = useState("");
   const [products, setProducts] = useState([]);
+  const [hasLogin, setHasLogin] = useState(false);
 
   async function handleKeyPress(e) {
     if (e.key === "Enter") onSearchProduct();
@@ -32,6 +33,7 @@ function App() {
     <>
       <BrowserRouter>
         <Navbar
+          hasLogin={hasLogin}
           keyword={keyword}
           setKeyword={setKeyword}
           handleKeyPress={handleKeyPress}
@@ -42,8 +44,8 @@ function App() {
           <Route path="/" element={<Index keyword={keyword} products={products} setProducts={setProducts} />}></Route>
           <Route path="/product" element={<ProductPage />}></Route>
           <Route path="/cart" element={<Cart />}></Route>
-          <Route path="/login" element={<LoginPage />}></Route>
-          <Route path="/profile" element={<Profile />}></Route>
+          <Route path="/login" element={<LoginPage setHasLogin={setHasLogin} />}></Route>
+          <Route path="/profile" element={<Profile setHasLogin={setHasLogin} />}></Route>
           <Route
             path="/:category"
             element={<Index keyword={keyword} products={products} setProducts={setProducts} />}

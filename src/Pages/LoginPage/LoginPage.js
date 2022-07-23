@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
-function LoginPage() {
+function LoginPage({ setHasLogin }) {
   let navigate = useNavigate();
 
   // signin
@@ -35,12 +35,12 @@ function LoginPage() {
       password: signInPassword,
       provider: "native",
     };
-    console.log("data", data);
 
     try {
       setSignInError("");
       const result = await axios.post(`http://3.212.173.194/api/1.0/user/signin`, data);
       localStorage.setItem("jwt", result.data.data.access_token);
+      setHasLogin(true);
       navigate("/profile", { replace: true });
     } catch (err) {
       setSignInError("Email或密碼錯誤，登入失敗");
@@ -73,6 +73,7 @@ function LoginPage() {
       setSignUpError("");
       const result = await axios.post(`http://3.212.173.194/api/1.0/user/signup`, data);
       localStorage.setItem("jwt", result.data.data.access_token);
+      setHasLogin(true);
       navigate("/profile", { replace: true });
     } catch (err) {
       setSignUpError("註冊失敗");

@@ -7,12 +7,13 @@ import memberHover from "../assets/member-hover.png";
 import search from "../assets/search.png";
 import searchHover from "../assets/search-hover.png";
 import { Link, NavLink } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-function Navbar({ onSearchProduct, handleKeyPress, keyword, setKeyword }) {
+function Navbar({ hasLogin, onSearchProduct, handleKeyPress, keyword, setKeyword }) {
   const [cartIcon, setCartIcon] = useState(cart);
   const [memberIcon, setMemberIcon] = useState(member);
   const [searchIcon, setSearchIcon] = useState(search);
+  const [hasToken, setHasToken] = useState(false);
 
   function onInputChange(e) {
     setKeyword(e.target.value);
@@ -37,6 +38,10 @@ function Navbar({ onSearchProduct, handleKeyPress, keyword, setKeyword }) {
   let activeStyle = {
     color: "#8B572A",
   };
+
+  useEffect(() => {
+    localStorage.getItem("jwt");
+  }, []);
 
   return (
     <>
@@ -77,9 +82,16 @@ function Navbar({ onSearchProduct, handleKeyPress, keyword, setKeyword }) {
               <div>1</div>
             </div>
           </NavLink>
-          <NavLink to="/login" style={({ isActive }) => (isActive ? activeStyle : undefined)}>
-            <img alt="profile" src={memberIcon} onMouseOver={onMemberHover} onMouseOut={onMemberHover} />
-          </NavLink>
+          {!hasLogin && (
+            <NavLink to="/login">
+              <img alt="profile" src={memberIcon} onMouseOver={onMemberHover} onMouseOut={onMemberHover} />
+            </NavLink>
+          )}
+          {hasLogin && (
+            <NavLink to="/profile">
+              <img alt="profile" src={memberIcon} onMouseOver={onMemberHover} onMouseOut={onMemberHover} />
+            </NavLink>
+          )}
         </div>
       </nav>
     </>

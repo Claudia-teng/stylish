@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import profileIcon from "../../assets/profile.png";
 import styles from "./ProfilePage.module.sass";
 
-function Profile() {
+function Profile({ setHasLogin }) {
   let navigate = useNavigate();
   const [profile, setProfile] = useState({});
 
@@ -19,6 +19,7 @@ function Profile() {
 
   function onLogout() {
     localStorage.removeItem("jwt");
+    setHasLogin(false);
     navigate("/", { replace: true });
   }
 
