@@ -16,10 +16,6 @@ function App() {
   const [products, setProducts] = useState([]);
   const [hasLogin, setHasLogin] = useState(false);
 
-  async function handleKeyPress(e) {
-    if (e.key === "Enter") onSearchProduct();
-  }
-
   async function onSearchProduct() {
     try {
       setProducts([]);
@@ -33,24 +29,16 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        <Navbar
-          hasLogin={hasLogin}
-          keyword={keyword}
-          setKeyword={setKeyword}
-          handleKeyPress={handleKeyPress}
-          onSearchProduct={onSearchProduct}
-        />
+        <Navbar keyword={keyword} setKeyword={setKeyword} onSearchProduct={onSearchProduct} />
         <ScrollToTop />
         <Routes>
-          <Route path="/" element={<Index keyword={keyword} products={products} setProducts={setProducts} />}></Route>
+          <Route path="/" element={<Index products={products} setProducts={setProducts} />}></Route>
           <Route path="/product" element={<ProductPage hasLogin={hasLogin} />}></Route>
           <Route path="/cart" element={<Cart />}></Route>
           <Route path="/login" element={<LoginPage setHasLogin={setHasLogin} />}></Route>
           <Route path="/profile" element={<Profile setHasLogin={setHasLogin} />}></Route>
-          <Route
-            path="/:category"
-            element={<Index keyword={keyword} products={products} setProducts={setProducts} />}
-          ></Route>
+          <Route path="/search" element={<Index products={products} setProducts={setProducts} />}></Route>
+          <Route path="/:category" element={<Index products={products} setProducts={setProducts} />}></Route>
           <Route path="/not-found" element={<NotFound />}></Route>
         </Routes>
         <Footer />

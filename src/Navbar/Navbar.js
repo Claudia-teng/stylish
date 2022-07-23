@@ -7,13 +7,12 @@ import memberHover from "../assets/member-hover.png";
 import search from "../assets/search.png";
 import searchHover from "../assets/search-hover.png";
 import { Link, NavLink } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-function Navbar({ hasLogin, onSearchProduct, handleKeyPress, keyword, setKeyword }) {
+function Navbar({ onSearchProduct, keyword, setKeyword }) {
   const [cartIcon, setCartIcon] = useState(cart);
   const [memberIcon, setMemberIcon] = useState(member);
   const [searchIcon, setSearchIcon] = useState(search);
-  const [hasToken, setHasToken] = useState(false);
 
   function onInputChange(e) {
     setKeyword(e.target.value);
@@ -43,16 +42,12 @@ function Navbar({ hasLogin, onSearchProduct, handleKeyPress, keyword, setKeyword
     return localStorage.getItem("jwt") ? true : false;
   }
 
-  useEffect(() => {
-    setHasToken(localStorage.getItem("jwt") ? true : false);
-  }, []);
-
   return (
     <>
       <nav className={styles.nav}>
-        <Link to="/">
+        <NavLink to="/">
           <img onClick={onCategoryChange} alt="logo" className={styles.logo} src={logo} />
-        </Link>
+        </NavLink>
         <ul className={styles.ul}>
           <li onClick={onCategoryChange}>
             <NavLink to="/women" style={({ isActive }) => (isActive ? activeStyle : undefined)}>
@@ -71,7 +66,7 @@ function Navbar({ hasLogin, onSearchProduct, handleKeyPress, keyword, setKeyword
           </li>
         </ul>
         <div className={styles.buttons}>
-          <input value={keyword} onChange={onInputChange} onKeyUp={handleKeyPress}></input>
+          <input value={keyword} onChange={onInputChange}></input>
           <NavLink to="/">
             <img
               className={styles.searchIcon}
