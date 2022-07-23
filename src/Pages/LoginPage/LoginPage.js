@@ -15,6 +15,7 @@ function LoginPage() {
   const [signUpUsername, setSignUpUsername] = useState("");
   const [signUpEmail, setSignUpEmail] = useState("");
   const [signUpPassword, setSignUpPassword] = useState("");
+  const [signUpError, setSignUpError] = useState("");
 
   function isValidEmail(email) {
     return /\S+@\S+\.\S+/.test(email);
@@ -22,8 +23,13 @@ function LoginPage() {
 
   async function onSignIn() {
     if (!isValidEmail(signInEmail)) {
-      return signInError("Please enter a valid email.");
+      return setSignInError("Email格式不正確");
     }
+
+    if (!signInPassword) {
+      return setSignInError("請輸入密碼");
+    }
+
     const data = {
       email: signInEmail,
       password: signInPassword,
@@ -31,22 +37,46 @@ function LoginPage() {
     };
     console.log("data", data);
 
-    // try {
-    //   const result = await axios.post(`http://3.212.173.194/api/1.0/user/signin`, data);
-    //   navigate("/profile", { replace: true });
-    // } catch (err) {}
+    try {
+      setSignInError("");
+      const result = await axios.post(`http://3.212.173.194/api/1.0/user/signin`, data);
+      localStorage.setItem("jwt", result.data.data.access_token);
+      navigate("/profile", { replace: true });
+    } catch (err) {
+      setSignInError("Email或密碼錯誤，登入失敗");
+    }
   }
 
   async function onSignUp() {
+    if (!signUpUsername) {
+      return setSignUpError("請輸入使用者名稱");
+    }
+
+    if (!isValidEmail(signUpEmail)) {
+      return setSignUpError("Email格式不正確");
+    }
+
+    if (!signUpPassword) {
+      return setSignUpError("請輸入密碼");
+    }
+
+    if (signUpPassword.length < 6) {
+      return setSignUpError("密碼必須至少包含六個字符");
+    }
+
     const data = {
       name: signUpUsername,
       email: signUpEmail,
       password: signUpPassword,
     };
-    console.log("data", data);
-    // try {
-    //   const result = await axios.post(`http://3.212.173.194/api/1.0/user/signup`, data);
-    // } catch (err) {}
+    try {
+      setSignUpError("");
+      const result = await axios.post(`http://3.212.173.194/api/1.0/user/signup`, data);
+      localStorage.setItem("jwt", result.data.data.access_token);
+      navigate("/profile", { replace: true });
+    } catch (err) {
+      setSignUpError("註冊失敗");
+    }
   }
 
   return (
@@ -66,6 +96,7 @@ function LoginPage() {
           <button onClick={onSignIn} type="button">
             登 入
           </button>
+          <p>{signInError}</p>
         </form>
         <form>
           <h1>註冊</h1>
@@ -78,6 +109,7 @@ function LoginPage() {
           <button onClick={onSignUp} type="button">
             註 冊
           </button>
+          <p>{signUpError}</p>
         </form>
       </div>
     </>

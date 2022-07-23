@@ -18,7 +18,6 @@ function Index({ products, setProducts }) {
   }
 
   useEffect(() => {
-    console.log("aaa");
     getProduct(category);
   }, [category]);
 
