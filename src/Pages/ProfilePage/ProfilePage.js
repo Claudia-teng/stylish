@@ -10,10 +10,17 @@ function Profile({ setHasLogin }) {
 
   async function getProfile() {
     let token = localStorage.getItem("jwt");
-    const result = await axios.get(`http://3.212.173.194/api/1.0/user/profile`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    setProfile(result.data.data);
+    if (!token) {
+      navigate("/login", { replace: true });
+    }
+    try {
+      const result = await axios.get(`http://3.212.173.194/api/1.0/user/profile`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setProfile(result.data.data);
+    } catch (err) {
+      navigate("/login", { replace: true });
+    }
   }
 
   function onLogout() {
