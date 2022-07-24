@@ -4,7 +4,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
-function Index({ products, setProducts }) {
+function Index({ products, setProducts, keyword }) {
   let navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   let params = useParams();
@@ -23,6 +23,7 @@ function Index({ products, setProducts }) {
   }
 
   useEffect(() => {
+    if (keyword) return;
     getProduct(category);
   }, [category]);
 
