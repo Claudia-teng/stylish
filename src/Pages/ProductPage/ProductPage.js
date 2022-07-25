@@ -224,6 +224,7 @@ function ProductPage() {
         })
         .then((response) => {
           setSuccess("購買成功！");
+          navigate("/thankyou", { replace: true });
         })
         .catch((error) => {
           setError("購買失敗！");

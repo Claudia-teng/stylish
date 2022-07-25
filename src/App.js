@@ -4,6 +4,7 @@ import Cart from "./Pages/Cart/Cart";
 import Profile from "./Pages/ProfilePage/ProfilePage.js";
 import LoginPage from "./Pages/LoginPage/LoginPage.js";
 import ProductPage from "./Pages/ProductPage/ProductPage.js";
+import ThankYou from "./ThankYou/ThankYou.js";
 import Navbar from "./Navbar/Navbar";
 import Footer from "./Footer/Footer";
 import ScrollToTop from "./ScrollToTop";
@@ -38,6 +39,7 @@ function App() {
           <Route path="/login" element={<LoginPage setHasLogin={setHasLogin} />}></Route>
           <Route path="/profile" element={<Profile setHasLogin={setHasLogin} />}></Route>
           <Route path="/search" element={<Index products={products} setProducts={setProducts} />}></Route>
+          <Route path="/thankyou" element={<ThankYou />}></Route>
           <Route path="/:category" element={<Index products={products} setProducts={setProducts} />}></Route>
           <Route path="/not-found" element={<NotFound />}></Route>
         </Routes>
