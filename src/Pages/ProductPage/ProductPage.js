@@ -174,8 +174,9 @@ function ProductPage() {
     if (!localStorage.getItem("jwt")) {
       setError("請先登入，畫面即將跳轉至登入頁");
       setTimeout(() => {
-        return navigate("/login", { replace: true });
+        navigate("/login", { replace: true });
       }, 3000);
+      return;
     }
 
     TPDirect.card.getPrime(async (result) => {
