@@ -3,7 +3,7 @@ import styles from "./Banner.module.sass";
 import axios from "axios";
 
 function Banner() {
-  let [campaigns, setCampaigns] = useState([]);
+  const [campaigns, setCampaigns] = useState([]);
 
   async function getCampaigns() {
     const result = await axios.get(`http://3.212.173.194/api/1.0/marketing/campaigns`);
@@ -17,14 +17,12 @@ function Banner() {
   return (
     <>
       <div className={styles.banner}>
-        {campaigns.map((campaign, i) => {
-          return (
-            <div key={i}>
-              <img alt="banner" src={campaign.picture}></img>
-              <div dangerouslySetInnerHTML={{ __html: campaign.story }}></div>
-            </div>
-          );
-        })}
+        {campaigns.length && (
+          <div>
+            <img alt="banner" src={campaigns[0].picture}></img>
+            <div dangerouslySetInnerHTML={{ __html: campaigns[0].story }}></div>
+          </div>
+        )}
       </div>
     </>
   );
