@@ -20,7 +20,7 @@ function App() {
   async function onSearchProduct() {
     try {
       setProducts([]);
-      const result = await axios.get(`http://3.212.173.194/api/1.0/products/search?keyword=${keyword}`);
+      const result = await axios.get(`https://claudia-teng.com/api/1.0/products/search?keyword=${keyword}`);
       setProducts(result.data.data);
     } catch (err) {
       setProducts([]);

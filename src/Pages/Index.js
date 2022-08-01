@@ -17,7 +17,7 @@ function Index({ products, setProducts, keyword }) {
     }
     setLoading(true);
     setProducts([]);
-    const result = await axios.get(`http://3.212.173.194/api/1.0/products/${category}`);
+    const result = await axios.get(`https://claudia-teng.com/api/1.0/products/${category}`);
     setProducts(result.data.data);
     setLoading(false);
   }

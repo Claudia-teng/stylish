@@ -14,7 +14,7 @@ function Profile({ setHasLogin }) {
       navigate("/login", { replace: true });
     }
     try {
-      const result = await axios.get(`http://3.212.173.194/api/1.0/user/profile`, {
+      const result = await axios.get(`https://claudia-teng.com/api/1.0/user/profile`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setProfile(result.data.data);

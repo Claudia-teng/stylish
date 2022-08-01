@@ -38,7 +38,7 @@ function LoginPage({ setHasLogin }) {
 
     try {
       setSignInError("");
-      const result = await axios.post(`http://3.212.173.194/api/1.0/user/signin`, data);
+      const result = await axios.post(`https://claudia-teng.com/api/1.0/user/signin`, data);
       localStorage.setItem("jwt", result.data.data.access_token);
       setHasLogin(true);
       navigate("/profile", { replace: true });
@@ -71,7 +71,7 @@ function LoginPage({ setHasLogin }) {
     };
     try {
       setSignUpError("");
-      const result = await axios.post(`http://3.212.173.194/api/1.0/user/signup`, data);
+      const result = await axios.post(`https://claudia-teng.com/api/1.0/user/signup`, data);
       localStorage.setItem("jwt", result.data.data.access_token);
       setHasLogin(true);
       navigate("/profile", { replace: true });

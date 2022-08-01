@@ -6,7 +6,7 @@ function Banner() {
   const [campaigns, setCampaigns] = useState([]);
 
   async function getCampaigns() {
-    const result = await axios.get(`http://3.212.173.194/api/1.0/marketing/campaigns`);
+    const result = await axios.get(`https://claudia-teng.com/api/1.0/marketing/campaigns`);
     setCampaigns(result.data.data);
   }
 

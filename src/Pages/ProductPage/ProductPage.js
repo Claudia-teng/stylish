@@ -31,7 +31,7 @@ function ProductPage() {
   async function getProductDetail() {
     try {
       setLoading(true);
-      const result = await axios.get(`http://3.212.173.194/api/1.0/products/details?id=${id}`);
+      const result = await axios.get(`https://claudia-teng.com/api/1.0/products/details?id=${id}`);
       setHasProduct(true);
       setProduct(result.data.data ? result.data.data : null);
       setColor(result.data.data.colors[0]);
@@ -223,7 +223,7 @@ function ProductPage() {
       };
 
       axios
-        .post("http://3.212.173.194/api/1.0/order/checkout", data, {
+        .post("https://claudia-teng.com/api/1.0/order/checkout", data, {
           headers: headers,
         })
         .then((response) => {
