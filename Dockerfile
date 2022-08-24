@@ -4,7 +4,7 @@ WORKDIR /app
 # Copy all files from current directory to working dir in image
 COPY . .
 # install node modules and build assets
-RUN yarn install && yarn build
+RUN npm install && npm build
 
 # nginx state for serving content
 FROM nginx:1.23.1-alpine
